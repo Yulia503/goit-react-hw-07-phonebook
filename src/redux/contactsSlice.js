@@ -1,60 +1,65 @@
-import { nanoid } from 'nanoid';
 import { createSlice } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-
-const initialStateContact = {
-  contacts: [],
-};
+import { fetchContacts, addContact, deleteContact } from './operations';
 
 const contactsSlice = createSlice({
   name: 'contacts',
-  initialState: initialStateContact,
+  initialState: {
+    items: [],
+    isLoading: false,
+    error: null,
+  },
+  extraReducers: {
 
-  reducers: {
 
-//*---------------додавання контакта---------------------------
+    //*----------- Fetch contacts-----------------
 
-    addContact: {
-      reducer(state, action) {
-        state.contacts.push(action.payload);
-      },
-
-      prepare(newContact) {
-        return {
-          payload: { id: nanoid(), ...newContact },
-        };
-      },
+    [fetchContacts.pending](state) {
+      state.isLoading = true;
+    },
+    [fetchContacts.fulfilled](state, action) {
+      state.isLoading = false;
+      state.error = null;
+      state.items = action.payload;
+    },
+    [fetchContacts.rejected](state, action) {
+      state.isLoading = false;
+      state.error = action.payload;
     },
 
-//*---------------видалення контакта------------------------
-    
-  
-    deleteContact: {
-      reducer(state, action) {
-        return {
-          contacts: state.contacts.filter(
-            contact => contact.id !== action.payload
-          ),
-        };
-      },
 
-      prepare(contactId) {
-        return {
-          payload: contactId,
-        };
-      },
+
+    //*-----------додаємо контакти------------
+
+    [addContact.pending](state) {
+      state.isLoading = true;
+    },
+    [addContact.fulfilled](state, action) {
+      state.isLoading = false;
+      state.error = null;
+      state.items.push(action.payload);
+    },
+    [addContact.rejected](state, action) {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+
+
+
+   //*-----------delete контакти------------
+
+    [deleteContact.pending](state) {
+      state.isLoading = true;
+    },
+    [deleteContact.fulfilled](state, action) {
+      state.isLoading = false;
+      state.error = null;
+      state.items = state.items.filter(item => item.id !== action.payload);
+    },
+    [deleteContact.rejected](state, action) {
+      state.isLoading = false;
+      state.error = action.payload;
     },
   },
 });
 
-export const { addContact, deleteContact } = contactsSlice.actions;
-
-export const reduceContact = contactsSlice.reducer;
-
-const persistRoot = {
-  key: 'root',
-  storage,
-};
-
-export const persistedReducer = persistReducer(persistRoot, reduceContact);
+export const contactsReducer = contactsSlice.reducer;

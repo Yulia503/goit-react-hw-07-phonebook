@@ -1,14 +1,40 @@
-import { useDispatch } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { setFilter } from 'redux/filterSlice';
+// import { selectFilter } from 'redux/selectors';
+// import { FilterInputBox, FilterText } from './ContactFilter.styled';
+
+// export const ContactFilter = () => {
+//   const filter = useSelector(selectFilter);
+//   const dispatch = useDispatch();
+//   return (
+//     <>
+//       <FilterText>Find contacts by name</FilterText>
+//       <FilterInputBox
+//         type="text"
+//         value={filter}
+//         onChange={evt => {
+//           dispatch(setFilter(evt.target.value));
+//         }}
+//       />
+//     </>
+//   );
+// };
+
+
+import { useDispatch, useSelector } from 'react-redux';
 import { setFilter } from 'redux/filterSlice';
+import { selectFilter } from 'redux/selectors';
 import { FilterInputBox, FilterText } from './ContactFilter.styled';
 
 export const ContactFilter = () => {
+  const filter = useSelector(selectFilter);
   const dispatch = useDispatch();
   return (
     <>
       <FilterText>Find contacts by name</FilterText>
       <FilterInputBox
         type="text"
+        value={filter}
         onChange={evt => {
           dispatch(setFilter(evt.target.value));
         }}
@@ -16,29 +42,3 @@ export const ContactFilter = () => {
     </>
   );
 };
-
-
-
-
-// import { FilterInputBox, FilterText } from './ContactFilter.styled';
-
-// export const ContactFilter = ({ filter, onContactFilter }) => {
-//   return (
-
-
-//     <>
-      
-//       <FilterText>Find contacts by name</FilterText>
-//       <FilterInputBox
-        
-//         type="text"
-//         value={filter}
-//         onChange={evt => {
-//           onContactFilter(evt.target.value);
-//         }}
-
-//       />
-//     </>
-//   );
-// }
-

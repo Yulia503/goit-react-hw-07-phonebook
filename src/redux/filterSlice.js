@@ -1,23 +1,15 @@
-import { createAction } from '@reduxjs/toolkit';
-import { createReducer } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-const filterInitialState = {
-  filter: '',
-};
-
-export const setFilter = createAction('filter/setFilter', contactNewName => {
-  return {
-    payload: contactNewName,
-  };
+const filterSlice = createSlice({
+  name: 'filter',
+  initialState: '',
+  reducers: {
+    setFilter(state, action) {
+      return action.payload;
+    },
+  },
 });
 
-export const filterReducer = createReducer(filterInitialState, builder => {
-  builder.addCase(setFilter, (state, action) => {
-    return {
-      ...state,
-      filter: action.payload,
-    };
-  });
-});
+export const { setFilter } = filterSlice.actions;
 
-//*-- повертаємо імя за пошуком-----
+export const filterReducer = filterSlice.reducer;
